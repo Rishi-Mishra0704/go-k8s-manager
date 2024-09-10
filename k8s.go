@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
+	"os"
 	"path/filepath"
 
 	v1 "k8s.io/api/core/v1"
@@ -27,17 +27,13 @@ func deployToK8s() {
 	// Define the pod
 	pod := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "hello-user-pod",
+			Name: "go-k8s-manager", // Updated pod name
 		},
 		Spec: v1.PodSpec{
 			Containers: []v1.Container{
 				{
-					Name:  "hello-user-container",
+					Name:  "go-k8s-manager", // Updated container name
 					Image: "rishimishra0704/go-k8s-manager:latest",
-					Command: []string{
-						"./go-k8s-manager",
-						"--action=serve",
-					},
 					Ports: []v1.ContainerPort{
 						{
 							ContainerPort: 8080,
@@ -60,8 +56,9 @@ func deployToK8s() {
 
 // helper function to get home directory
 func homeDir() string {
-	if h := flag.Lookup("home"); h != nil {
-		return h.Value.String()
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
 	}
-	return "/"
+	return home
 }

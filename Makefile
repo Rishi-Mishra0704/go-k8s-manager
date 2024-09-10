@@ -25,5 +25,5 @@ docker-pull:
 docker-stop:
 	@docker stop go-k8s-manager || true
 
-k8s-deploy:
+k8s-deploy: build
 	@./bin/go-k8s-manager --action=k8s-deploy
