@@ -27,7 +27,7 @@ func deployToK8s() {
 	// Define the pod
 	pod := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "go-k8s-manager", // Updated pod name
+			Name: "go-k8s-manager",
 		},
 		Spec: v1.PodSpec{
 			Containers: []v1.Container{

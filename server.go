@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type Server struct {
@@ -20,9 +21,13 @@ func (server *Server) setupRouter() {
 
 	// Middleware
 	router.POST("/hello", sayHello)
+	router.GET("/", func(c echo.Context) error { return c.String(200, "Hello, world!") })
+	// Prometheus metrics route
+
+	router.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
+
 	server.router = router
 }
-
 func (server *Server) Start() error {
 	server.setupRouter()
 	return server.router.Start(server.listenAddr)
