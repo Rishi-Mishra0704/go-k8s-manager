@@ -24,6 +24,7 @@ func (server *Server) setupRouter() {
 }
 
 func (server *Server) Start() error {
+	server.setupRouter()
 	return server.router.Start(server.listenAddr)
 }
 
@@ -40,8 +41,11 @@ func sayHello(c echo.Context) error {
 }
 
 func response(err error, message string) map[string]interface{} {
-	return map[string]interface{}{
-		"error":   err.Error(),
+	resp := map[string]interface{}{
 		"message": message,
 	}
+	if err != nil {
+		resp["error"] = err.Error()
+	}
+	return resp
 }
